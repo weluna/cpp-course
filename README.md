@@ -34,3 +34,6 @@ TEST(name, c1) {
 }
 ```
 * 接下来你就可以通过 clion 自带的 google test 插件进行当个函数的测试啦！
+
+> 注意 windows 中文编码问题 
+* 语音首选项 》 管理语言设置 》 更改系统区域设置 》 Beta 版：使用 Unicode UTF-8 提供全球语言支持（U）
