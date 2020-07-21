@@ -42,7 +42,7 @@ TEST(name, contants) {
 TEST(name, test_sizeof) {
     cout << "short 类型所占内存空间为： " << sizeof(short) << endl;
 
-    cout << "int 类型所占内存空间为： " << sizeof(int) << endl;
+    cout << "int 类型所占内存空间为： " << sizeof(long) << endl;
 
     cout << "long 类型所占内存空间为： " << sizeof(long) << endl;
 
@@ -81,7 +81,7 @@ TEST(name, test_char) {
     //ch = "abcde"; //错误，不可以用双引号
     //ch = 'abcde'; //错误，单引号内只能引用一个字符
 
-    cout << (int) ch << endl;
+    cout << (long) ch << endl;
     ch = 97;
     cout << ch << endl;
 }
@@ -229,6 +229,7 @@ TEST(name, test_do_while) {
     } while (num < 10);
 }
 
+#include <math.h>
 /**
  * 打印水仙花数字
  */
@@ -311,9 +312,9 @@ TEST(name, test_array) {
     cout << "数组的元素个数为： " << sizeof(arr) / sizeof(arr[0]) << endl;
 
     //2、可以通过数组名获取到数组首地址
-    cout << "数组首地址为： " << (int) arr << endl;
-    cout << "数组中第一个元素地址为： " << (int) &arr[0] << endl;
-    cout << "数组中第二个元素地址为： " << (int) &arr[1] << endl;
+    cout << "数组首地址为： " << (long) arr << endl;
+    cout << "数组中第一个元素地址为： " << (long) &arr[0] << endl;
+    cout << "数组中第二个元素地址为： " << (long) &arr[1] << endl;
 
     //arr = 100; 错误，数组名是常量，因此不可以赋值
 }
@@ -394,16 +395,16 @@ TEST(name, double_array_address) {
     cout << "二维数组一行大小：" << sizeof(arr[0]) << endl;
     cout << "二维数组元素大小：" << sizeof(arr[0][0]) << endl;
 
-    cout << "二维数组行数： " << size(arr) << endl;
-    cout << "二维数组列数： " << size(arr[0]) << endl;
+    cout << "二维数组行数： " << sizeof(arr) / sizeof(arr[0]) << endl;
+    cout << "二维数组列数： " << sizeof(arr[0]) / sizeof(arr[0][0])<< endl;
 
     //地址
-    cout << "二维数组首地址：" << (int) arr << endl;
-    cout << "二维数组第一行地址：" << (int) arr[0] << endl;
-    cout << "二维数组第二行地址：" << (int) arr[1] << endl;
+    cout << "二维数组首地址：" << (long) arr << endl;
+    cout << "二维数组第一行地址：" << (long) arr[0] << endl;
+    cout << "二维数组第二行地址：" << (long) arr[1] << endl;
 
-    cout << "二维数组第一个元素地址：" << (int) &arr[0][0] << endl;
-    cout << "二维数组第二个元素地址：" << (int) &arr[0][1] << endl;
+    cout << "二维数组第一个元素地址：" << (long) &arr[0][0] << endl;
+    cout << "二维数组第二个元素地址：" << (long) &arr[0][1] << endl;
 }
 
 /**
@@ -613,7 +614,7 @@ void print_array(int arr[], int len) {
  */
 TEST(name, test_bubble_sort) {
     int arr[10] = {4, 3, 6, 9, 1, 2, 10, 8, 7, 5};
-    int len = size(arr);
+    int len = sizeof(arr) / sizeof(arr[0]);
     bubble_sort(arr, len);
     print_array(arr, len);
 }
@@ -664,7 +665,7 @@ TEST(name, test_struct_array) {
             {"琪亚娜", 16, 60}
     };
 
-    for (int i = 0; i < size(arr); ++i) {
+    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); ++i) {
         print_student(arr[i]);
     }
 }
