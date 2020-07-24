@@ -27,7 +27,7 @@ const int c_g_b = 10;
  * 常量区
  * 局部常量存放在栈区
  */
-TEST(s, memory_test) {
+TEST(t, memory_test) {
     //局部变量
     int a = 10;
     int b = 10;
@@ -58,9 +58,10 @@ TEST(s, memory_test) {
     cout << "局部常量c_l_b地址为： " << (long) &c_l_b << endl;
 }
 
-int * func() {
+int *func() {
     int a = 10;
-    return &a;
+    //return &a;
+    return new int(a);
 }
 
 /**
@@ -72,7 +73,7 @@ TEST(t, test_stack) {
     cout << *p << endl;
 }
 
-int * func2() {
+int *func2() {
     int *a = new int(10);
     return a;
 }
@@ -109,7 +110,7 @@ TEST(t, test_new_arry) {
         cout << arr[j] << endl;
     }
 
-    delete arr;
+    delete[] arr;
 }
 
 /**
@@ -143,3 +144,243 @@ TEST(t, test_reference_01) {
     cout << "b = " << b << endl;
     cout << "c = " << c << endl;
 }
+
+/**
+ * 值传递
+ * @param a
+ * @param b
+ */
+void mySwap01(int a, int b) {
+    int temp = 0;
+    a = b;
+    b = temp;
+}
+
+/**
+ * 地址传递
+ * @param a
+ * @param b
+ */
+void mySwap02(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+/**
+ * 引用传递
+ * @param a
+ * @param b
+ */
+void mySwap03(int &a, int &b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+TEST(t, test_sawp) {
+    int a = 10;
+    int b = 20;
+
+    mySwap01(a, b);
+    cout << "a :" << a << " b:" << b << endl;
+    mySwap02(&a, &b);
+    cout << "a :" << a << " b:" << b << endl;
+    mySwap03(a, b);
+    cout << "a :" << a << " b:" << b << endl;
+}
+
+void func03(int &ref) {
+    ref = 100;
+}
+
+TEST(t, test_ref) {
+    int a = 10;
+
+    // 自动转换为 int *const ref0 = &a; 指针常量是指指针指向不可改变，也说明为什么引用不可改变
+    int &ref = a;
+    ref = 20; // 内部发现是引用，自动帮我们转换为：*ref = 20;
+
+    cout << "a: " << a << endl;
+    cout << "ref:" << ref << endl;
+    func03(a);
+}
+
+void showValue(const int &v) {
+    // v += 10;
+    cout << v << endl;
+}
+
+TEST(t, test_const) {
+    // int &ref = 10; 引用本身需要一个合法内存空间，因此这行错误
+    // 加入 const 就可以了，编译器优化代码，int temp = 10; const int &ref = temp;
+    const int &ref = 10;
+
+    cout << ref << endl;
+
+    int a = 10;
+    showValue(a);
+}
+
+int func04(int a, int b = 10, int c = 10) {
+    return a + b + c;
+}
+
+void func05(int a, int) {
+    cout << "This is func" << endl;
+}
+
+void olf() {
+    cout << "olf() " << endl;
+}
+
+void olf(int a) {
+    cout << "olf(int a)" << endl;
+}
+
+void olf(double a) {
+    cout << "olf(double a)" << endl;
+}
+
+void olf(int a, double b) {
+    cout << "olf(int a, double b)" << endl;
+}
+
+void olf(double a, int b) {
+    cout << "olf(double a, int b)" << endl;
+}
+
+void func(int &a) {
+    cout << "func(int &a)" << endl;
+}
+
+void func(const int &a) {
+    cout << "func(const int &a)" << endl;
+}
+
+void func2(int a, int b = 10) {
+    cout <<  "func2(int a, int b = 10)" << endl;
+}
+
+void func2(int a) {
+    cout << "func2(int a)" << endl;
+}
+
+TEST(t, test_overload_ref) {
+    int a = 10;
+    func(a);
+    func(10);
+
+    // func2(10);
+
+}
+
+TEST(t, test_func) {
+    int sum = func04(10);
+    cout << sum << endl;
+    func05(10, 10);
+
+    olf();
+    olf(10);
+    olf(3.14);
+    olf(10, 3.14);
+    olf(3.14, 10);
+}
+
+const double PI = 3.14;
+
+class Circle {
+public:
+    int r;
+    double perimeter() {
+        return 2 * PI * r;
+    }
+};
+
+TEST(t, test_circle) {
+    Circle c1{};
+    c1.r = 10;
+
+    cout << "圆的周长为：" << c1.perimeter() << endl;
+}
+
+class Student {
+public:
+    void setName(string name) {
+        this->name = name;
+    }
+    void setId(int id) {
+        this->id = id;
+    }
+    void print() {
+        cout << "Student id: " << id << ", name: " << name << "." << endl;
+    }
+private:
+    string name;
+    int id;
+};
+
+class Person {
+public:
+    string name;
+protected:
+    string car;
+private:
+    int password;
+public:
+    void func() {
+        name = "芽衣";
+        car = "法拉利";
+        password = 123456;
+    }
+    void print() {
+        cout << "Person name: " << name << ", car: " << car << ", password: " << password << endl;
+    }
+};
+
+TEST(t, test_class) {
+    Student student{};
+    student.setId(101);
+    student.setName("八重樱");
+
+    student.print();
+
+    Person person;
+    person.func();
+    person.name = "琪亚娜";
+    person.print();
+}
+
+class C1 {
+    int a;
+};
+
+struct C2 {
+    int a;
+};
+
+TEST(t, test_calss2) {
+    C1 c1;
+
+    C2 c2;
+    c2.a = 10;
+}
+
+class Foo {
+public:
+    Foo() {
+        cout << "构造函数" << endl;
+    }
+    ~Foo() {
+        cout << "析构函数" << endl;
+    }
+};
+
+void testFoo() {
+    Foo foo;
+}
+
+TEST(t, testFoo) {
+    testFoo();
+}
+
